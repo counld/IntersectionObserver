@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<style>
+	h1,h3,h6 {
+		padding: 10px;
+		margin: 0;
+	}
+	.warper {
+		display: flex;
+		padding: 10px 30px;
+	}
+
+	.title-info {
+		padding-left: 30px;
+	}
+
+	.loading {
+		height: 100px;
+		text-align: center;
+		color: gray;
+		line-height: 100px;
+	}
+	p {
+		text-align: right;
+		padding-right: 70px;
+	}
+</style>
+
+<body>
+	<div>
+			<h3>
+				1、在青玉色的中天里，那些闪闪烁烁的星群，有你的眼睛存在。
+			</h3>
+			<p>--沈从文</p>
+			<h3>
+				2、我不是来救你的，我是来爱你的。
+			</h3>
+			<p>--《全球高考》</p>
+			<h3>
+				3、诗歌，美丽，浪漫，爱情，这些才是我们活着的意义。
+			</h3>
+			<p>--电影《死亡诗社》</p>
+			<h3>
+				3、诗歌，美丽，浪漫，爱情，这些才是我们活着的意义。
+			</h3>
+			<p>--余秀华</p>
+			<h3>
+				5、我的生命不过是温柔的疯狂，眼里一片海，我却不肯蓝。
+			</h3>
+			<p> --兰波</p>
+			<h3>
+				6、这个世界是唯一的，人都要回家，都要用布把星星盖好然后把灯碰亮。
+			</h3>
+			<p>--顾城</p>
+			<h3>
+				7、我本是槐花院落闲散的人，满襟酒气。小池塘边跌坐看鱼，眉挑烟火过一生。
+			</h3>
+			<p>
+				--沈离淮
+			</p>
+
+			<h3>
+				8、把发热的脸颊，埋在柔软的积雪一般，想那么恋爱下下看看。
+			</h3>
+			<p>
+				--石川啄木
+			</p>
+			<h3>
+				9、在广袤的空间和无限的时间中，能与你共享同一颗行星和同一段时光是我的荣幸。
+			</h3>
+			<p>
+				--卡尔萨根
+			</p>
+			<h3>
+				10、每个人都很孤独，在人的一生中，遇到爱、遇到性都布稀罕，稀罕的是遇到了解。
+
+			</h3>
+			<p>
+				--廖一梅
+			</p>
+
+			<h3>
+				11、树在，山在，大地在，岁月在，我在，你还要怎样更好的世界。
+
+			</h3>
+			<p>
+
+				--张晓风《我在》
+			</p>
+			<h3>
+				12、成长就是:渐渐温柔，克制，朴素，不怨不问不记，安静中渐渐体会生命盛大。
+			</h3>
+			<p>
+				--沈奇岚《那个姐姐教我们的事》
+			</p>
+			<h3>
+				13、未来的路不会比过去更笔直，更平坦，但是我并不恐惧，我眼前还闪动着道路前方野百合和野蔷薇的影子。
+			</h3>
+			<p>
+				--季羡林《八十抒怀》
+			</p>
+			<h3>
+				14、我所说的一切，无非是提醒后到达这个路口的人，你绝不是只有一条路，而是四通八达的，你可以做选择。
+			</h3>
+			<p>
+				--王小波《一只独立独行的猪》
+			</p>
+			<h3>
+				15、万有引力，是互相吸引孤独的力，宇宙正在倾斜，所以大家渴望认识。
+			</h3>
+			<p>
+				--谷川俊太郎
+			</p>
+	</div>
+	<div class="content"></div>
+	<div class="loading">已经到低了</div>
+	<script>
+		//获取监听对象
+		let loading = document.querySelector('.loading');
+		let isloading = false;
+		//建立观察者
+		let ob = new IntersectionObserver(function (entries) {
+			entries = entries[0];
+			if (entries.isIntersecting) {
+				console.log(entries);
+				console.log('加载更多')
+				moreData();
+			}
+
+		}, {
+			threshold: 1//重叠百分
+		})
+
+		//观察
+		ob.observe(loading);
+		//一次加载6条
+		//post /movies/more
+		const size = 6;
+		let idList = [];
+		let startIndex = 0;
+		function initData() {
+			fetch('http://www.pudge.wang:3080/api/movies/list')
+				.then(res => res.json())
+				.then(res => {
+					const { ids, result } = res;
+					idList = ids;
+					startIndex = result.length;
+					domEle(result);//生成对应列表
+				})
+		}
+		initData();
+
+		function domEle(result) {//dom化节点
+			const div = document.createElement("div");
+			div.innerHTML = showContent(result);
+			document.querySelector('.content').appendChild(div)
+		}
+
+		function showContent(list) {
+
+			if (!(list instanceof Array)) {
+				return '';
+			}
+			const content = list.map(item => {
+				return `<div class="warper">
+				<img src="${item.img.replace(/w.h/, '60.90')}"/>
+				<div class="title-info">
+					<h3>${item.nm}</h3>
+					<h6>${item.star}</h6>
+					<div>${item.showInfo}</div>
+				</div>
+			</div>`
+			}).join('');
+
+			// div.innerHTML = (content)
+			return content
+		}
+
+		//请求更多
+		function moreData() {
+			const str = idList.slice(startIndex, startIndex + size).join(',');
+			if (str === '') {
+				console.log(ob,'live')
+				ob.unobserve(loading);//数据请求完了。移除监听loading
+				return;
+			}
+				fetch('http://www.pudge.wang:3080/api/movies/more', {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ ids: str }),
+			})
+				.then(res => res.json())
+				.then(res => {
+					const { result } = res;
+					startIndex += size;
+					domEle(result)//生成对应列表
+					console.log(res, 'resloading')
+				}).catch(err => {
+					console.log(err, 'error')
+				})
+		}
+
+	</script>
+</body>
+
+</html>
