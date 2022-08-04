@@ -241,7 +241,6 @@
 		function downMove(e) {
 			var heightBefore = mainDiv.offsetHeight - 2;
 			var addHeight = e.clientY - getPosition(mainDiv).top - mainDiv.offsetHeight;
-			console.log(addHeight, 'addHeight')
 			mainDiv.style.height = heightBefore + addHeight + 'px';
 		}
 		//left移动
