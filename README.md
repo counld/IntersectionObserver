@@ -16,3 +16,7 @@ observer.unobserve(target);
 observer.disconnect();
 
 可以查看文档链接 --- https://www.jianshu.com/p/7c06669ed98e
+
+# 图片裁切利用css的clip获取裁切的图片，
+
+该功能有一个bug --拖动的时候不能准确的裁到合适的位置;

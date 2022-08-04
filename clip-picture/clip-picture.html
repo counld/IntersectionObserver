@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<style>
+	body {
+		background: #333;
+	}
+
+	#box {
+		width: 500px;
+		height: 380px;
+		position: absolute;
+		top: 100px;
+		left: 100px;
+	}
+
+	#img1,
+	#img2 {
+		width: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	#img1 {
+		opacity: 0.3;
+	}
+
+	#img2 {
+		/* border-radius: 50%; */
+		clip: rect(0, 200px, 200px, 0);
+	}
+
+	#main {
+		position: absolute;
+		/*第三层需用绝对定位浮在上面*/
+		width: 200px;
+		height: 200px;
+		border: 1px solid #fff;
+	}
+
+	.Divmin {
+		position: absolute;
+		width: 8px;
+		height: 8px;
+		background: #fff;
+	}
+
+	.up-left {
+		margin-top: -4px;
+		margin-left: -4px;
+		cursor: nw-resize;
+	}
+
+	.up {
+		left: 50%;
+		/*父元素盒子main宽度的一半，注意要有绝对定位*/
+		margin-left: -4px;
+		top: -4px;
+		cursor: n-resize;
+	}
+
+	.up-right {
+		top: -4px;
+		right: -4px;
+		cursor: ne-resize;
+	}
+
+	.right {
+		top: 50%;
+		margin-top: -4px;
+		right: -4px;
+		cursor: e-resize;
+	}
+
+	.right-down {
+		right: -4px;
+		bottom: -4px;
+		cursor: se-resize;
+	}
+
+	.down {
+		bottom: -4px;
+		left: 50%;
+		margin-left: -4px;
+		cursor: s-resize;
+	}
+
+	.left-down {
+		left: -4px;
+		bottom: -4px;
+		cursor: sw-resize;
+	}
+
+	.left {
+		left: -4px;
+		top: 50%;
+		margin-top: -4px;
+		cursor: w-resize;
+	}
+</style>
+<style>
+	#preview {
+		position: absolute;
+		width: 500px;
+		height: 380px;
+		/* top: 100px; */
+		left: 600px;
+	}
+
+	#preview #img3 {
+		width: 100%;
+		position: absolute;
+		clip: rect(0, 200px, 200px, 0);
+	}
+</style>
+
+<body>
+	<div id="box">
+		<img src="./default.jpg" id="img1" />
+		<img src="./default.jpg" id="img2" />
+		<div id="main">
+			<div class="Divmin up-left"></div>
+			<div class="Divmin up"></div>
+			<div class="Divmin up-right"></div>
+			<div class="Divmin right"></div>
+			<div class="Divmin right-down"></div>
+			<div class="Divmin down"></div>
+			<div class="Divmin left-down"></div>
+			<div class="Divmin left"></div>
+		</div>
+		<div id="preview">
+			<img src="./default.jpg" id="img3" />
+		</div>
+	</div>
+
+	<script>
+		var mainDiv = $('main');
+		var rightDiv = $('right');
+		var img2 = $('img2');
+		var isDraging = false;
+		var contact = "";//表示被按下的触点
+
+		mainDiv.addEventListener('click',whileElement,false);
+		function whileElement(e) {
+			contact = e.target.classList[1]
+			cantainer = e.target;
+			eleMove(cantainer);
+		}
+		
+		//鼠标按下时
+		function eleMove(cantainer) {
+			cantainer.onmousedown = function () {
+			isDraging = true;
+			}
+		}
+		
+		//鼠标松开时
+		window.onmouseup = function () {
+			isDraging = false;
+			setPreview();
+		}
+		//获取id的函数
+		function $(id) {
+			if(document.getElementById(id)) return document.getElementById(id);
+			return document.querySelector('.'+id);
+		}
+		window.onmousemove = function (e) {
+			var e = e || window.event;
+			if (isDraging == true) {
+				setChoice()
+				switch (contact) {
+					case "up": upMove(e);
+						break;
+					case "right": rightMove(e);
+						break;
+					case "down": downMove(e);
+						break;
+					case "left": leftMove(e);
+						break;
+					case "up-right":
+						upMove(e); rightMove(e);
+						break;
+					case "right-down":
+						downMove(e); rightMove(e);
+						break;
+					case "left-down":
+						downMove(e); leftMove(e);
+						break;
+					case "up-left":
+						upMove(e); leftMove(e);
+						break;
+				}
+			}
+		}
+
+
+		//获取元素相对于屏幕左边及上边的距离，利用offsetLeft
+		function getPosition(el) {
+			var left = el.offsetLeft;
+			var top = el.offsetTop;
+			var parent = el.offsetParent;
+			while (parent != null) {
+				left += parent.offsetLeft;
+				top += parent.offsetTop;
+				parent = parent.offsetParent;
+			}
+			return { "left": left, "top": top };
+		}
+		//up移动
+		function upMove(e) {
+			var y = e.clientY;//鼠标位置的纵坐标
+			var heightBefore = mainDiv.offsetHeight - 2;//选取框变化前的高度
+			var addHeight = getPosition(mainDiv).top - y;//增加的高度
+			mainDiv.style.height = heightBefore + addHeight + 'px';//选取框变化后的宽度
+			mainDiv.style.top = mainDiv.offsetTop - addHeight + 'px';//相当于变化后左上角的纵坐标，鼠标向上移纵坐标减小，下移增大
+		}
+		//right移动
+		function rightMove(e) {
+			var x = e.clientX;//鼠标位置的横坐标
+			var widthBefore = mainDiv.offsetWidth - 2;//选取框变化前的宽度
+			//var widthBefore = mainDiv.clientWidth;
+			var addWidth = x - getPosition(mainDiv).left - widthBefore;//鼠标移动后选取框增加的宽度
+			mainDiv.style.width = widthBefore + addWidth + 'px';//选取框变化后的宽度
+		}
+		//down移动
+		function downMove(e) {
+			var heightBefore = mainDiv.offsetHeight - 2;
+			var addHeight = e.clientY - getPosition(mainDiv).top - mainDiv.offsetHeight;
+			console.log(addHeight,'addHeight')
+			mainDiv.style.height = heightBefore + addHeight + 'px';
+		}
+		//left移动
+		function leftMove(e) {
+			var widthBefore = mainDiv.offsetWidth - 2;
+			var addWidth = getPosition(mainDiv).left - e.clientX;//增加的宽度等于距离屏幕左边的距离减去鼠标位置横坐标
+			mainDiv.style.width = widthBefore + addWidth + 'px';
+			mainDiv.style.left = mainDiv.offsetLeft - addWidth + 'px';//左边的距离（相当于左边位置横坐标）等于选取框距父级元素的距离减去增加的宽度
+		}
+		//设置选取框图片区域明亮显示
+		function setChoice() {
+			var top = mainDiv.offsetTop;
+			var right = mainDiv.offsetLeft + mainDiv.offsetWidth;
+			var bottom = mainDiv.offsetTop + mainDiv.offsetHeight;
+			var left = mainDiv.offsetLeft;
+			img2.style.clip = "rect(" + top + "px," + right + "px," + bottom + "px," + left + "px)";
+		}
+		//禁止图片被选中
+		document.onselectstart = new Function('event.returnValue = false;');
+		//鼠标按下触点时
+		rightDiv.onmousedown = function (e) {
+			e.stopPropagation();
+			isDraging = true;
+			contact = "right";
+		}
+		//右边图片预览函数
+		function setPreview() {
+			var top = mainDiv.offsetTop;
+			var right = mainDiv.offsetLeft + mainDiv.offsetWidth;
+			var bottom = mainDiv.offsetTop + mainDiv.offsetHeight;
+			var left = mainDiv.offsetLeft;
+			var img3 = $('img3');
+			img3.style.top = -top + 'px';
+			img3.style.left = -left + 'px';
+			img3.style.clip = "rect(" + top + "px," + right + "px," + bottom + "px," + left + "px)";
+		}
+	</script>
+</body>
+
+</html>
