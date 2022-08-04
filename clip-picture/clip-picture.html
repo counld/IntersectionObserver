@@ -8,6 +8,14 @@
 	<title>Document</title>
 </head>
 <style>
+	img {
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+		-khtml-user-select: none;
+		user-select: none;
+	}
+
 	body {
 		background: #333;
 	}
@@ -147,20 +155,20 @@
 		var isDraging = false;
 		var contact = "";//表示被按下的触点
 
-		mainDiv.addEventListener('click',whileElement,false);
+		mainDiv.addEventListener('click', whileElement, false);
 		function whileElement(e) {
 			contact = e.target.classList[1]
 			cantainer = e.target;
 			eleMove(cantainer);
 		}
-		
+
 		//鼠标按下时
 		function eleMove(cantainer) {
 			cantainer.onmousedown = function () {
-			isDraging = true;
+				isDraging = true;
 			}
 		}
-		
+
 		//鼠标松开时
 		window.onmouseup = function () {
 			isDraging = false;
@@ -168,8 +176,8 @@
 		}
 		//获取id的函数
 		function $(id) {
-			if(document.getElementById(id)) return document.getElementById(id);
-			return document.querySelector('.'+id);
+			if (document.getElementById(id)) return document.getElementById(id);
+			return document.querySelector('.' + id);
 		}
 		window.onmousemove = function (e) {
 			var e = e || window.event;
@@ -233,7 +241,7 @@
 		function downMove(e) {
 			var heightBefore = mainDiv.offsetHeight - 2;
 			var addHeight = e.clientY - getPosition(mainDiv).top - mainDiv.offsetHeight;
-			console.log(addHeight,'addHeight')
+			console.log(addHeight, 'addHeight')
 			mainDiv.style.height = heightBefore + addHeight + 'px';
 		}
 		//left移动
@@ -252,7 +260,9 @@
 			img2.style.clip = "rect(" + top + "px," + right + "px," + bottom + "px," + left + "px)";
 		}
 		//禁止图片被选中
-		document.onselectstart = new Function('event.returnValue = false;');
+		document.onselectstart = function (e) {
+			e.preventDefault;
+		}
 		//鼠标按下触点时
 		rightDiv.onmousedown = function (e) {
 			e.stopPropagation();
