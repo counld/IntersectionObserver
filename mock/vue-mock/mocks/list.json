@@ -1,0 +1,15 @@
+/**
+ * @url /list
+ */
+ {
+	"code": 404,
+	"data|5-10": [
+		{
+			"string|1-10": "★",
+			"id": "@guid",
+			"mtime": "@datetime",
+			"email": "@email"
+		}
+	],
+	"message": "success"
+}

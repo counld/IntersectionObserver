@@ -1,0 +1,14 @@
+/**
+ * @url /login
+ */
+ {
+	"code": 404,
+	"data|5-10": [
+		{
+			"name": "@cname",
+			"id": "@guid",
+			"email": "@email"
+		}
+	],
+	"message": "success"
+}
