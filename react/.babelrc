@@ -1,0 +1,4 @@
+{
+	"presets": ["@babel/preset-env", "@bable/preser-react"], //使用react语法糖
+	"plugins": ["@babel/plugin-transform-runtime", "@babel/plugin-proposal-class-properties"]
+}

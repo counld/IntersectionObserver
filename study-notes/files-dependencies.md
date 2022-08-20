@@ -24,3 +24,14 @@ With the project configured, you can customize Ant Design's theme by specifying 
 
 
 https://github.com/ElementUI/theme-chalk/blob/master/gulpfile.js
+
+
+## 文件介绍
+
+ .babelrc # babel 编译配置
+
+├── .editorconfig # 代码格式
+
+├── .gitignore # Git 提交忽略的文件配置
+
+├── .postcssrc.js # 转换 css 的工具配置文件
