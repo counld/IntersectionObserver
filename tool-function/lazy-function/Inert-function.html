@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<body>
+		<button id="btn">点击</button>
+		<button id="handle">触发二次</button>
+			
+	<script>
+		//可以实现按钮的点击，以上的实现和 函数重写 的原理是一样的，在第一次调用 函数时，就确定了 之后函数的内容，之后调用函数，就不用执行判断，来判断当前浏览器所兼容的 语法了。只需调用一次，就明白了  https://blog.csdn.net/zxf_CN/article/details/112237077
+	const btn = document.getElementById('btn')
+	const handle = document.getElementById('handle')
+	
+	function addEvent(type, element, fun) {
+			if (element.addEventListener) {
+					console.log(1)
+					addEvent = function(type, element, fun) {
+							element.addEventListener(type, fun, false)
+					}
+			} 
+			else if (element.attachEvent) {
+					console.log(2)
+					addEvent = function(type, element, fun) {
+							element.attachEvent('on' + type, fun)
+					}
+			} 
+			else {
+					console.log(3)
+					addEvent = function(type, element, fun) {
+							element['on' + type] = fun
+					}
+			}
+	
+			console.log(100)
+			return addEvent(type, element, fun)
+	}
+	
+	
+	// 使用函数，为元素绑定事件
+	addEvent('click', btn, function() { //click
+			console.log('click')
+	})
+	// 使用函数，为元素绑定事件
+	addEvent('click', handle, function() {  //handle
+			console.log('handle')
+	})
+
+	// 第二种  使用 立即执行函数，在一开始，就进行 兼容性的判断，然后返回不同的方法函数，然后使用 变量接收返回的函数，使用变量来调用函数就可以了
+	const addEvent = (function() {
+    if (document.addEventListener) {
+        return function(type, element, fun) {
+            element.addEventListener(type, fun, false)
+        }
+    } 
+    else if (document.attachEvent) {
+        return function (type, element, fun) {
+            element.attachEvent('on' + type, fun)
+        }
+    }
+    else {
+        return function (type, element, fun) {
+            element['on' + type] = fun
+        }
+    }
+})();
+
+addEvent('click', btn, function() {
+    console.log(1)
+})
+
+	
+	</script>
+	</body>
+	
+</body>
+</html>

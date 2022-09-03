@@ -1,16 +1,7 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from 'react-dom';
+import AppWraper from './src/page/appWraper';
+import App from './src/router';
+import 'antd/dist/antd.css'
 
-const App = () => {
-	return (
-		<div>
-			<div>这个是个幻灯片</div>
-			<div>这个是个幻灯片</div>
-			<div>这个是个幻灯片</div>
-			<div>这个是个幻灯片</div>
-			<div>这个是个幻灯片</div>
-		</div>
-	)
-}
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(AppWraper(App), document.getElementById('root'));

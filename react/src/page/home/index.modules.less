@@ -1,0 +1,36 @@
+.scroll_box {
+	overflow-y: scroll;
+	position: relative;
+	height: 500px;
+	transform: translateZ(0);
+	transition-timing-function: linear;
+}
+
+.scroll_hold {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	z-index: -1;
+}
+
+.list{
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+}
+
+.color_list {
+	font-size: 18px;
+	text-align: center;
+	color: red;
+	background-color: #666;
+	list-style: none;
+}
+
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+}
