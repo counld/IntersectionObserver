@@ -35,6 +35,7 @@ const Home = () => {
 			// 获取开始截取数据的值
 			const bufferVal = bufferSize / 2
 			const newStartIndex = Math.floor(scrollTop / itemHeight)
+			console.log(scrollTop,newStartIndex,'sjiawn',boxHeight,itemHeight,renderCount)
 			// 获取结束截取的数据的值
 			const newEndIndex = newStartIndex + renderCount
 			// 如果发生变化，那么就重新渲染

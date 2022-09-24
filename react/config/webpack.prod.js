@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -11,15 +12,14 @@ module.exports = {
 	mode: "production", //生产环境
 	entry: "./index.js", //入口文件
 	output: {
-		filename: "bundle.js",
-		path: path.resolve(__dirname, '../dist'),//出口文件，
+		filename: "index.js",
+		path: path.resolve(__dirname, '../build'),//出口文件，
 	},
 	devtool: "source-map",
 	//模块配置规则
 	module: {
 		//第三方匹配规则(多个loader的话要写成数组)
-		rules: [{
-			oneOf: [
+		rules: [
 				{
 					test: /\.(js|jsx)$/,
 					exclude: /node_modules/, // 排除node_modules中js|jsx文件的检测, 提升编译效率
@@ -55,8 +55,6 @@ module.exports = {
 						},
 						'less-loader']
 				},
-			]
-		}
 		]
 	},
 	resolve: {
@@ -88,16 +86,26 @@ module.exports = {
 			cacheLocation: path.resolve(__dirname, "../node_modules/.cache/eslintcache"), //文件缓存在node_modules 下的.cache文件夹内,
 		}),//使用eslint
 		new HtmlWebpackPlugin({
-			title: 'My App',
-			chunks: ['app'],
-			filename: 'index.[contenthash:10].html',
+			filename: 'index.html',
 			// Load a custom template (lodash by default)
 			template: path.resolve(__dirname, "../public/index.html"),
-			favicon: path.resolve(__dirname, "../public/favicon.ico"),
-			'base': {
-				'href': 'http://example.com/some/page.html',
-				'target': '_blank'
-			}
-		})
+      inject: 'body',
+		}),
+		// 复制不用动态导入的资源
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          context: 'public',
+          from: 'assets/*',
+          to: path.resolve(__dirname, '../build'),
+          toType: 'dir',
+          globOptions: {
+            dot: true,
+            gitignore: true,
+            ignore: ['**/index.html'] // **表示任意目录下
+          }
+        }
+      ]
+    }),
 	]
 }

@@ -111,7 +111,7 @@ module.exports = {
 		port: "3000",
 		open: true, //是否打开浏览器
 		hot: true,   //在版本4以上可以开启hMR热更新
-		historyApiFallback: true,
+		historyApiFallback: true, // 返回404的时候返回index文件进行路由匹配
 		compress: true, // 设置为true代表在浏览器请求本地服务器上静态文件的时候开启gzip压缩，可以提高开发时的效率
 		overlay: {
 			warnings: true,

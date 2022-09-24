@@ -144,6 +144,9 @@ url-loader 设置limit值控制图片大小，（小于该文件大小的图片�
     }
 }
 
+配置热更新 在devServer里面配置不生效，在package.json 可以 --hot --open
+"dev": "webpack-dev-server --open --hot --mode development --config build/webpack.dev.js",
+
 // 2 懒加载 webpack支持异步加载模块的特性。
 按需加载：如一个应用有3个页面，首页加载时只加载首页的逻辑，其他两个页面跳转到页面后在异步加载。
 
@@ -169,6 +172,21 @@ file-where-here //https://blog.csdn.net/cecoal/article/details/124571586
 
 ```
 
+### 图片压缩工具是对本地静态图片资源比较多的使用引入压缩插件
+
+
+### 对多入口文件的引入模块有共工的模块资源引入时，可以考虑资源分块splitchunk，在webpack的optimization压缩
+主要是针对多入口----这里压缩配置比较多，建议查资料
+
+### 多路口按需加载可以使用import函数进行动态加载，这个引入的文件会被单独的加载成一个文件，实现按需加载
+
+### 使用core.js实现垫片进行拓展新的兼容出来，但文件会更大，可以实现按需加载，可以找到这个node_modules下的引入的文件名
+···使用智能预设实现es6语法的兼容低版本浏览器
+
+
+### PWA离线缓存，使用了worker-serve插件, 运行是使用了serve的库进行开启服务器
+
+--- serve dist 开启文件资源，进行离线缓存
 
 ### aixos的请求取消示例 --- cancelRequest
 ```javascript
